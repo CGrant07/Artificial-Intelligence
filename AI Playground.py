@@ -26,11 +26,11 @@ if response.status_code == 200:
 
   # Extract weather information
   weather = data["main"]
-  temperature = round(weather["temp"] - 273.15, 2)  # Convert Kelvin to Celsius
+  temperature = round((weather["temp"] * 9/5) - 459.67)  # Convert Kelvin to Celsius
 
   # Print weather information
   print(f"Weather in {city_name}:")
-  print(f"Temperature: {temperature} °C")
+  print(f"Temperature: {temperature} °F")
   print(f"Description: {data['weather'][0]['description']}")
 else:
   # Handle error
