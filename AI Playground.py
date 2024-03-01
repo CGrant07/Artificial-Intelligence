@@ -3,37 +3,45 @@
 # Program: AI Playground
 
 print("This will be a place for me to play with programming using AI Technology\n")
-# Import libraries
 import requests
+import json
 
-# Define API key and base URL (replace with your own API key)
-api_key = "ada71058b408099a065a3683bfb5b363"
-base_url = "http://api.openweathermap.org/data/2.5/weather?"
+def get_weather(api_key, zip_code):
+  """
+  Retrieves weather information for a US zip code using the OpenWeatherMap API.
 
-# Get city name from user
-#city_name = input("Enter the city name: ")
-country_code = input("What is your Country Code? (If the United States, put: +1\n: "
-zip_code = input("What is your zip code? ")
-# Build the URL with city name and API key
-complete_url = f"{base_url}q=zip={zip_code},{country_code}&appid={api_key}"
-#complete_url = f"{base_url}q={city_name}&appid={api_key}"
-  #http://api.openweathermap.org/geo/1.0/zip?zip={zip_code},{country_code}&appid={api_key}
-# Send request and get response
-response = requests.get(complete_url)
+  Args:
+      api_key: Your OpenWeatherMap API key.
+      zip_code: The US zip code to get weather for.
 
-# Check for successful response
-if response.status_code == 200:
-  # Parse the JSON response
-  data = response.json()
+  Returns:
+      A dictionary containing weather information, or None if an error occurs.
+  """
 
-  # Extract weather information
-  weather = data["main"]
-  temperature = round((weather["temp"] * 9/5) - 459.67)  # Convert Kelvin to Celsius
+  # Replace "YOUR_API_KEY" with your actual OpenWeatherMap API key
+  # You can get a free API key at https://openweathermap.org/
+  url = f"https://api.openweathermap.org/data/2.5/weather?zip={zip_code},us&appid=YOUR_API_KEY"
 
-  # Print weather information
-  print(f"Weather in {city_name}:")
-  print(f"Temperature: {temperature} °F")
-  print(f"Description: {data['weather'][0]['description']}")
+  try:
+    response = requests.get(url)
+    response.raise_for_status()  # Raise an exception for unsuccessful requests
+  except requests.exceptions.RequestException as e:
+    print(f"Error retrieving weather data: {e}")
+    return None
+
+  data = json.loads(response.content)
+  return data
+
+# Example usage
+api_key = "ada71058b408099a065a3683bfb5b363"  # Replace with your actual API key
+zip_code = "your_zip_code"
+
+weather_info = get_weather(api_key, zip_code)
+
+if weather_info:
+  # Print some of the retrieved weather information
+  print(f"Weather in {zip_code}:")
+  print(f"  Temperature: {weather_info['main']['temp']} Kelvin")
+  print(f"  Description: {weather_info['weather'][0]['description']}")
 else:
-  # Handle error
-  print("Error: Could not retrieve weather data.")
+  print("Unable to retrieve weather information for", zip_code)
