@@ -11,11 +11,13 @@ api_key = "ada71058b408099a065a3683bfb5b363"
 base_url = "http://api.openweathermap.org/data/2.5/weather?"
 
 # Get city name from user
-city_name = input("Enter the city name: ")
-
+#city_name = input("Enter the city name: ")
+country_code = input("What is your Country Code? (If the United States, put: +1\n: "
+zip_code = input("What is your zip code? ")
 # Build the URL with city name and API key
-complete_url = f"{base_url}q={city_name}&appid={api_key}"
-
+complete_url = f"{base_url}q=zip={zip_code},{country_code}&appid={api_key}"
+#complete_url = f"{base_url}q={city_name}&appid={api_key}"
+  #http://api.openweathermap.org/geo/1.0/zip?zip={zip_code},{country_code}&appid={api_key}
 # Send request and get response
 response = requests.get(complete_url)
 
